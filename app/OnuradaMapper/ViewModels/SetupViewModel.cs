@@ -7,10 +7,14 @@ using OnuradaMapper.Services;
 
 namespace OnuradaMapper.ViewModels;
 
-public partial class SetupItem(string key, Func<Task>? fix) : ObservableObject
+public partial class SetupItem(string key, Func<Task>? fix, bool always = false) : ObservableObject
 {
     public string Key { get; } = key;
-    [ObservableProperty] private bool _ok;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ShowButton))]
+    private bool _ok;
+    /// <summary>Install buttons disappear once done; choosing the game folder and rebuilding the library stay available.</summary>
+    public bool ShowButton => fix != null && (always || !Ok);
     [ObservableProperty] private bool _checking = true;
     [ObservableProperty] private string _status = "…";
     public bool CanFix => fix != null;
@@ -32,12 +36,12 @@ public partial class SetupViewModel : ObservableObject
     public SetupViewModel()
     {
         _workspace = new("SetupWorkspace", null);
-        _game = new("SetupGame", BrowseGame);
+        _game = new("SetupGame", BrowseGame, always: true);
         _tools = new("SetupTools", () => Run("SetupTools", [Installer.Ffmpeg(), Installer.YtDlp()]));
         _python = new("SetupPython", () => Run("SetupPython", Installer.PythonEnv()));
         _bepinex = new("SetupBepInEx", () => Run("SetupBepInEx", [Installer.BepInEx()]));
         _mod = new("SetupMod", () => Run("SetupMod", [Installer.Mod()]));
-        _corpus = new("SetupCorpus", () => Run("SetupCorpus", Installer.Corpus(force: true)));
+        _corpus = new("SetupCorpus", () => Run("SetupCorpus", Installer.Corpus(force: true)), always: true);
         foreach (var i in new[] { _workspace, _game, _tools, _python, _bepinex, _mod, _corpus }) Items.Add(i);
     }
 

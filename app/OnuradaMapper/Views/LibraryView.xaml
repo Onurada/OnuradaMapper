@@ -29,11 +29,29 @@
         </DockPanel>
 
         <ListView Grid.Row="2" ItemsSource="{Binding Songs}" SelectedItem="{Binding Selected}" MouseDoubleClick="List_DoubleClick">
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="{DynamicResource LibOpen}" Command="{Binding OpenCommand}" />
+                    <MenuItem Header="{DynamicResource LibRebuild}" Command="{Binding RebuildCommand}" />
+                    <MenuItem Header="{DynamicResource LibInstall}" Command="{Binding InstallCommand}" />
+                    <MenuItem Header="{DynamicResource LibOpenFolder}" Command="{Binding OpenFolderCommand}" />
+                    <MenuItem Header="JSON" Command="{Binding EditCommand}" />
+                </ContextMenu>
+            </ListView.ContextMenu>
             <ListView.View>
                 <GridView>
+                    <GridViewColumn Width="52">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Width="36" Height="36" CornerRadius="5" ClipToBounds="True" Background="{StaticResource BrandGradient}">
+                                    <Image Source="{Binding CoverPath, Converter={StaticResource Thumb}}" Stretch="UniformToFill" />
+                                </Border>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Header="#" Width="48" DisplayMemberBinding="{Binding Id}" />
-                    <GridViewColumn Header="{DynamicResource ColTitle}" Width="230" DisplayMemberBinding="{Binding Title}" />
-                    <GridViewColumn Header="{DynamicResource ColArtist}" Width="200" DisplayMemberBinding="{Binding Artist}" />
+                    <GridViewColumn Header="{DynamicResource ColTitle}" Width="210" DisplayMemberBinding="{Binding Title}" />
+                    <GridViewColumn Header="{DynamicResource ColArtist}" Width="180" DisplayMemberBinding="{Binding Artist}" />
                     <GridViewColumn Header="{DynamicResource ColEnv}" Width="150" DisplayMemberBinding="{Binding Env}" />
                     <GridViewColumn Header="FX" Width="70">
                         <GridViewColumn.CellTemplate>
@@ -75,8 +93,11 @@
             <Button Command="{Binding OpenCommand}" Margin="0,0,8,0" Style="{DynamicResource AccentButtonStyle}">
                 <StackPanel Orientation="Horizontal"><TextBlock Text="&#xE8A7;" Style="{StaticResource Icon}" Margin="0,0,8,0" /><TextBlock Text="{DynamicResource LibOpen}" /></StackPanel>
             </Button>
-            <Button Command="{Binding OpenFolderCommand}">
+            <Button Command="{Binding OpenFolderCommand}" Margin="0,0,24,0">
                 <StackPanel Orientation="Horizontal"><TextBlock Text="&#xE838;" Style="{StaticResource Icon}" Margin="0,0,8,0" /><TextBlock Text="{DynamicResource LibOpenFolder}" /></StackPanel>
+            </Button>
+            <Button Command="{Binding RebuildAllCommand}" ToolTip="{DynamicResource LibRebuildAllHint}">
+                <StackPanel Orientation="Horizontal"><TextBlock Text="&#xE895;" Style="{StaticResource Icon}" Margin="0,0,8,0" /><TextBlock Text="{DynamicResource LibRebuildAll}" /></StackPanel>
             </Button>
         </WrapPanel>
     </Grid>

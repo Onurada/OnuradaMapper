@@ -20,10 +20,12 @@ public partial class SongWindow : Window
         Title = $"#{id}  {_vm.Title}";
         Timeline.Player = _vm.Player;
         Preview.Player = _vm.Player;
+        Density.Player = _vm.Player;
         _vm.Reloaded += Wire;
         _vm.PreviewChanged += () => Preview.Diff = _vm.Level?.LoadDiff(_vm.PreviewDiff);
         _vm.Deleted += () => { Changed?.Invoke(); Close(); };
         _vm.Player.Tick += UpdateTime;
+        _vm.Player.Tick += FollowWord;
         _vm.Player.PropertyChanged += (_, e) => { if (e.PropertyName == nameof(AudioPlayer.Duration)) UpdateTime(); };
         Wire();
         PreviewKeyDown += OnKey;
@@ -41,6 +43,9 @@ public partial class SongWindow : Window
         Preview.Story = _vm.Story;
         Preview.Pad = _vm.Pad;
         Preview.Diff = _vm.Level?.LoadDiff(_vm.PreviewDiff);
+        Density.Story = _vm.Story; Density.Pad = _vm.Pad; Density.Duration = _vm.Grid?.Dur ?? _vm.Player.Duration;
+        Density.Diffs = Enumerable.Range(0, _vm.Level?.Diffs.Count ?? 0).Select(i => _vm.Level!.LoadDiff(i)).OfType<Difficulty>().ToList();
+        Density.InvalidateMeasure(); Density.InvalidateVisual();
         Changed?.Invoke();
     }
 
@@ -64,6 +69,20 @@ public partial class SongWindow : Window
             MainWindow.Shot(this, System.IO.Path.Combine(dir, $"song_preview_{t:0}.png"));
         }
         Application.Current.Shutdown();
+    }
+
+    WordRow? _following;
+
+    /// <summary>While the song plays on the Lyrics tab, the word being sung is selected and kept in view.</summary>
+    void FollowWord()
+    {
+        if (!_vm.Player.IsPlaying || Tabs.SelectedIndex != 2 || WordGrid.IsKeyboardFocusWithin && WordGrid.CurrentCell.IsValid && Keyboard.FocusedElement is TextBox) return;
+        var t = _vm.Player.Position;
+        var w = _vm.Words.LastOrDefault(x => x.Start <= t);
+        if (w == null || w == _following) return;
+        _following = w;
+        WordGrid.SelectedItem = w;
+        WordGrid.ScrollIntoView(w);
     }
 
     void UpdateTime() =>

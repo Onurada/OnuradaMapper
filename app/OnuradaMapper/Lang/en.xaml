@@ -294,4 +294,9 @@
     <s:String x:Key="CoverFromFile">Cover from a picture…</s:String>
     <s:String x:Key="CoverGenerate">Generate a cover</s:String>
     <s:String x:Key="CoverChanged">Cover changed. Copy to the game to see it there.</s:String>
+    <s:String x:Key="SongDensity">Note density</s:String>
+    <s:String x:Key="SongDensityHint">Notes per second for every difficulty, coloured by the light-story section. Click to play from there.</s:String>
+    <s:String x:Key="LibRebuildAll">Rebuild all</s:String>
+    <s:String x:Key="LibRebuildAllHint">Build every song again, e.g. after updating the app</s:String>
+    <s:String x:Key="LibRebuildAllConfirm">Rebuild all {0} songs? This takes about half a minute per song.</s:String>
 </ResourceDictionary>

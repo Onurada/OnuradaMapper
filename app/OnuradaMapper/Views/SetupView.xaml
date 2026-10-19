@@ -47,7 +47,7 @@
                                     <TextBlock Text="{Binding Status}" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" TextWrapping="Wrap" />
                                 </StackPanel>
                                 <Button Grid.Column="2" Content="{Binding Button}" Command="{Binding FixCommand}" VerticalAlignment="Center" Margin="12,0,0,0" MinWidth="110"
-                                        Visibility="{Binding CanFix, Converter={StaticResource BoolVis}}" />
+                                        Visibility="{Binding ShowButton, Converter={StaticResource BoolVis}}" />
                             </Grid>
                         </Border>
                     </DataTemplate>

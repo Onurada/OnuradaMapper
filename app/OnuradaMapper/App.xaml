@@ -18,6 +18,7 @@
             <v:Percent x:Key="Indeterminate" />
             <v:TaskbarState x:Key="TaskbarState" />
             <v:Fraction x:Key="Fraction" />
+            <v:Thumb x:Key="Thumb" />
 
             <FontFamily x:Key="Icons">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
             <SolidColorBrush x:Key="Brand" Color="#FF4FA3" />

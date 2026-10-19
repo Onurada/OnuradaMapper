@@ -90,6 +90,26 @@ public sealed class Fraction : IValueConverter
     public object ConvertBack(object v, Type t, object p, CultureInfo c) => throw new NotSupportedException();
 }
 
+/// <summary>File path → small frozen bitmap (decoded at 64 px, file not kept open).</summary>
+public sealed class Thumb : IValueConverter
+{
+    static readonly Dictionary<string, System.Windows.Media.Imaging.BitmapImage> Cache = [];
+    public object? Convert(object v, Type t, object p, CultureInfo c)
+    {
+        if (v is not string path || !System.IO.File.Exists(path)) return null;
+        var key = path + System.IO.File.GetLastWriteTimeUtc(path).Ticks;
+        if (Cache.TryGetValue(key, out var b)) return b;
+        try
+        {
+            b = new System.Windows.Media.Imaging.BitmapImage();
+            b.BeginInit(); b.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad; b.DecodePixelWidth = 64; b.UriSource = new Uri(path); b.EndInit(); b.Freeze();
+            return Cache[key] = b;
+        }
+        catch { return null; }
+    }
+    public object ConvertBack(object v, Type t, object p, CultureInfo c) => throw new NotSupportedException();
+}
+
 public sealed class Percent : IValueConverter
 {
     // -1 = indeterminate

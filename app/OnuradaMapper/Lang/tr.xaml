@@ -294,4 +294,9 @@
     <s:String x:Key="CoverFromFile">Resimden kapak…</s:String>
     <s:String x:Key="CoverGenerate">Kapak üret</s:String>
     <s:String x:Key="CoverChanged">Kapak değişti. Oyunda görmek için oyuna kopyala.</s:String>
+    <s:String x:Key="SongDensity">Nota yoğunluğu</s:String>
+    <s:String x:Key="SongDensityHint">Her zorluk için saniyedeki nota sayısı, ışık hikâyesi bölümüne göre renkli. Oradan çalmak için tıkla.</s:String>
+    <s:String x:Key="LibRebuildAll">Hepsini yeniden derle</s:String>
+    <s:String x:Key="LibRebuildAllHint">Bütün şarkıları yeniden derle (mesela app güncellendikten sonra)</s:String>
+    <s:String x:Key="LibRebuildAllConfirm">{0} şarkının hepsi yeniden derlensin mi? Şarkı başına yaklaşık yarım dakika sürer.</s:String>
 </ResourceDictionary>

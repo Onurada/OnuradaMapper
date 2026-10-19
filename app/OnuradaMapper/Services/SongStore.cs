@@ -9,6 +9,8 @@ public sealed record SongInfo(string Id, string Title, string Artist, string Env
 {
     public string OutDir => AppEnv.WS("out", Folder);
     public string GameLevelDir => Path.Combine(AppEnv.CustomLevelsDir, Folder);
+    public string? CoverPath => File.Exists(Path.Combine(OutDir, "cover.jpg")) ? Path.Combine(OutDir, "cover.jpg")
+                              : File.Exists(AppEnv.WS("covers", Id + ".jpg")) ? AppEnv.WS("covers", Id + ".jpg") : null;
 }
 
 /// <summary>songs.json: one config object per song id, written by autostory.py and read by build.py.</summary>

@@ -96,4 +96,22 @@ public partial class LibraryViewModel : ObservableObject
     }
 
     [RelayCommand] void Refreshed() => Refresh();
+
+    /// <summary>After a pipeline update: build every song again (and copy it to the game if that is switched on).</summary>
+    [RelayCommand]
+    async Task RebuildAll()
+    {
+        var built = _all.Where(s => s.Built).ToList();
+        if (built.Count == 0) return;
+        if (MessageBox.Show(string.Format(Loc.T("LibRebuildAllConfirm"), built.Count), "Onurada Mapper", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes) return;
+        var steps = new List<JobStep>();
+        foreach (var s in built)
+        {
+            var b = MapPipeline.Build(s.Id);
+            steps.Add(new JobStep($"#{s.Id} {s.Title}", b.Run));
+            if (AppEnv.Settings.InstallAfterBuild) steps.Add(new JobStep($"#{s.Id} → {Loc.T("StepInstall")}", Installer.InstallLevel(s.Folder).Run));
+        }
+        await JobService.I.RunAsync(Loc.T("LibRebuildAll"), steps);
+        Refresh();
+    }
 }
