@@ -1,0 +1,28 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  app:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - name: Build the app
+        run: dotnet build app/OnuradaMapper -c Release
+      # the mod needs Beat Saber's own assemblies, so it is built locally (release.ps1), not here
+
+  python:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Syntax check the pipeline
+        run: python -m py_compile (Get-ChildItem tools -Filter *.py).FullName

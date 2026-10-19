@@ -1,0 +1,60 @@
+<UserControl x:Class="OnuradaMapper.Views.SetupView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="32,28,32,24" MaxWidth="900" HorizontalAlignment="Left">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Command="{Binding RefreshCommand}" Margin="0,0,8,0">
+                        <StackPanel Orientation="Horizontal"><TextBlock Text="&#xE72C;" Style="{StaticResource Icon}" Margin="0,0,8,0" /><TextBlock Text="{DynamicResource SetupRecheck}" /></StackPanel>
+                    </Button>
+                    <Button Command="{Binding InstallAllCommand}" Style="{DynamicResource AccentButtonStyle}" Padding="16,8"
+                            Visibility="{Binding AllOk, Converter={StaticResource NotBoolVis}}">
+                        <StackPanel Orientation="Horizontal"><TextBlock Text="&#xE896;" Style="{StaticResource Icon}" Margin="0,0,8,0" /><TextBlock Text="{DynamicResource SetupInstallAll}" /></StackPanel>
+                    </Button>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource SetupTitle}" Style="{StaticResource PageTitle}" />
+                    <TextBlock Text="{DynamicResource SetupSubtitle}" Style="{StaticResource SubText}" />
+                </StackPanel>
+            </DockPanel>
+
+            <Border Style="{StaticResource Card}" Margin="0,18,0,12" Visibility="{Binding AllOk, Converter={StaticResource BoolVis}}" BorderBrush="#2BB673">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xE73E;" Style="{StaticResource Icon}" Foreground="#2BB673" FontSize="18" Margin="0,0,12,0" />
+                    <TextBlock Text="{DynamicResource SetupAllOk}" VerticalAlignment="Center" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <ItemsControl ItemsSource="{Binding Items}" Margin="0,12,0,0">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Style="{StaticResource Card}" Margin="0,0,0,8" Padding="18,14">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="36" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid VerticalAlignment="Top" Margin="0,2,0,0">
+                                    <TextBlock Text="{Binding Ok, Converter={StaticResource OkGlyph}}" Foreground="{Binding Ok, Converter={StaticResource StepBrush}}" Style="{StaticResource Icon}" FontSize="18"
+                                               Visibility="{Binding Checking, Converter={StaticResource NotBoolVis}}" />
+                                    <ProgressBar IsIndeterminate="True" Width="18" Height="3" HorizontalAlignment="Left" Visibility="{Binding Checking, Converter={StaticResource BoolVis}}" />
+                                </Grid>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="{Binding Title}" FontWeight="SemiBold" FontSize="14" />
+                                    <TextBlock Text="{Binding Desc}" Style="{StaticResource SubText}" FontSize="12" Margin="0,2,0,4" />
+                                    <TextBlock Text="{Binding Status}" FontFamily="Cascadia Mono, Consolas" FontSize="11.5" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <Button Grid.Column="2" Content="{Binding Button}" Command="{Binding FixCommand}" VerticalAlignment="Center" Margin="12,0,0,0" MinWidth="110"
+                                        Visibility="{Binding CanFix, Converter={StaticResource BoolVis}}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <TextBlock Text="{Binding GpuText}" Style="{StaticResource SubText}" Visibility="{Binding GpuText, Converter={StaticResource EmptyVis}}" Margin="0,4,0,0" />
+            <TextBlock Text="{DynamicResource SetupLegal}" Style="{StaticResource SubText}" FontSize="12" Margin="0,12,0,0" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

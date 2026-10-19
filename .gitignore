@@ -1,0 +1,49 @@
+# Whitelist: only source code goes into the repository.
+# Everything else in this folder is data (songs, stems, analysis, built maps), backups, or material
+# extracted from the game (corpus/, decomp/, levelenv.json) that is copyrighted and must never be published.
+/*
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/LICENSE
+!/release.ps1
+!/app/
+!/mod/
+!/tools/
+!/docs/
+!/.github/
+
+# app
+/app/**/bin/
+/app/**/obj/
+/app/**/*.user
+
+# mod: only the plugin source (no test harnesses, no builds)
+/mod/*
+!/mod/OnuradaLyrics/
+/mod/OnuradaLyrics/bin/
+/mod/OnuradaLyrics/obj/
+
+# tools: the pipeline only (no per-song config, no one-off scripts)
+/tools/*
+!/tools/requirements.txt
+!/tools/bslib.py
+!/tools/analyze.py
+!/tools/transcribe2.py
+!/tools/alignall.py
+!/tools/voiceid.py
+!/tools/autostory.py
+!/tools/build.py
+!/tools/mapper.py
+!/tools/lights.py
+!/tools/colorstory.py
+!/tools/gestures.py
+!/tools/extract_corpus.py
+!/tools/env_of_levels.py
+!/tools/corpus.py
+!/tools/packbc3.py
+!/tools/makevideo.py
+!/tools/makecover.py
+
+__pycache__/
+*.pyc

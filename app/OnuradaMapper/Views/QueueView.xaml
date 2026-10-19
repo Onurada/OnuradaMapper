@@ -1,0 +1,87 @@
+<UserControl x:Class="OnuradaMapper.Views.QueueView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="32,28,32,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                <Button Command="{Binding StopCommand}" Margin="0,0,8,0" Visibility="{Binding Running, Converter={StaticResource BoolVis}}">
+                    <StackPanel Orientation="Horizontal"><TextBlock Text="&#xE71A;" Style="{StaticResource Icon}" Margin="0,0,8,0" /><TextBlock Text="{DynamicResource QStop}" /></StackPanel>
+                </Button>
+                <Button Command="{Binding StartCommand}" Style="{DynamicResource AccentButtonStyle}" Padding="16,8" Visibility="{Binding Running, Converter={StaticResource NotBoolVis}}">
+                    <StackPanel Orientation="Horizontal"><TextBlock Text="&#xE768;" Style="{StaticResource Icon}" Margin="0,0,8,0" /><TextBlock Text="{DynamicResource QStart}" /></StackPanel>
+                </Button>
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Text="{DynamicResource QTitle}" Style="{StaticResource PageTitle}" />
+                <TextBlock Text="{DynamicResource QSubtitle}" Style="{StaticResource SubText}" />
+            </StackPanel>
+        </DockPanel>
+
+        <Border Grid.Row="1" Style="{StaticResource Card}" Margin="0,16,0,12">
+            <StackPanel>
+                <DockPanel>
+                    <Button DockPanel.Dock="Right" Command="{Binding AddLinksCommand}" Margin="8,0,0,0" VerticalAlignment="Top">
+                        <StackPanel Orientation="Horizontal"><TextBlock Text="&#xE710;" Style="{StaticResource Icon}" Margin="0,0,8,0" /><TextBlock Text="{DynamicResource QAdd}" /></StackPanel>
+                    </Button>
+                    <TextBox Text="{Binding Links, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" Height="74" VerticalScrollBarVisibility="Auto" TextWrapping="NoWrap"
+                             ToolTip="{DynamicResource QLinksHint}" />
+                </DockPanel>
+                <ProgressBar IsIndeterminate="True" Height="3" Margin="0,6,0,0" Visibility="{Binding Busy, Converter={StaticResource BoolVis}}" />
+                <WrapPanel Margin="0,10,0,0">
+                    <TextBlock Text="{DynamicResource NmLanguage}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                    <ComboBox ItemsSource="{Binding Languages}" SelectedItem="{Binding Language}" MinWidth="130" Margin="0,0,20,0" />
+                    <TextBlock Text="{DynamicResource NmDream}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                    <RadioButton GroupName="qd" Content="{DynamicResource NmDreamAuto}" IsChecked="{Binding Dream, Converter={StaticResource IntIs}, ConverterParameter=0}" Margin="0,0,12,0" />
+                    <RadioButton GroupName="qd" Content="{DynamicResource NmDreamOff}" IsChecked="{Binding Dream, Converter={StaticResource IntIs}, ConverterParameter=2}" Margin="0,0,20,0" />
+                    <CheckBox Content="Zoktay video" IsChecked="{Binding Zoktay}" Margin="0,0,20,0" />
+                    <TextBlock Text="{DynamicResource NmKaraoke}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                    <RadioButton GroupName="qk" Content="{DynamicResource NmKaraokeDream}" IsChecked="{Binding Karaoke, Converter={StaticResource IntIs}, ConverterParameter=0}" Margin="0,0,12,0" />
+                    <RadioButton GroupName="qk" Content="{DynamicResource NmKaraokeAll}" IsChecked="{Binding Karaoke, Converter={StaticResource IntIs}, ConverterParameter=1}" Margin="0,0,20,0" />
+                    <CheckBox Content="{DynamicResource NmInstall}" IsChecked="{Binding Install}" />
+                </WrapPanel>
+            </StackPanel>
+        </Border>
+
+        <ListView Grid.Row="2" ItemsSource="{Binding Items}" SelectedItem="{Binding Selected}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="36">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding State, Converter={StaticResource StepGlyph}}" Foreground="{Binding State, Converter={StaticResource StepBrush}}" Style="{StaticResource Icon}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="{DynamicResource ColTitle}" Width="230">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate><TextBox Text="{Binding Title, UpdateSourceTrigger=LostFocus}" MinWidth="200" /></DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="{DynamicResource ColArtist}" Width="190">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate><TextBox Text="{Binding Artist, UpdateSourceTrigger=LostFocus}" MinWidth="160" /></DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="{DynamicResource QSource}" Width="220" DisplayMemberBinding="{Binding Source}" />
+                    <GridViewColumn Header="{DynamicResource QStatus}" Width="260" DisplayMemberBinding="{Binding Detail}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <DockPanel Grid.Row="3" Margin="0,12,0,0">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                <Button Command="{Binding MoveUpCommand}" Margin="0,0,8,0" ToolTip="{DynamicResource QUp}"><TextBlock Text="&#xE74A;" Style="{StaticResource Icon}" /></Button>
+                <Button Command="{Binding RemoveCommand}" Content="{DynamicResource QRemove}" Margin="0,0,8,0" />
+                <Button Command="{Binding RetryCommand}" Content="{DynamicResource QRetry}" Margin="0,0,8,0" />
+                <Button Command="{Binding ClearDoneCommand}" Content="{DynamicResource QClear}" Margin="0,0,16,0" />
+            </StackPanel>
+            <TextBlock Text="{Binding Message}" Style="{StaticResource SubText}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+        </DockPanel>
+    </Grid>
+</UserControl>
